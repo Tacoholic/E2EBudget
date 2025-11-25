@@ -1,0 +1,30 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:5173",
+      "localStorage": [
+        {
+          "name": "__VUE_DEVTOOLS_NEXT_PLUGIN_SETTINGS__dev.esm.pinia__",
+          "value": "{\"logStoreChanges\":true}"
+        },
+        {
+          "name": "__vue-devtools-frame-state__",
+          "value": "{\"width\":80,\"height\":60,\"top\":0,\"left\":50,\"open\":false,\"route\":\"/\",\"position\":\"bottom\",\"isFirstVisit\":true,\"closeOnOutsideClick\":false,\"minimizePanelInactive\":5000,\"preferShowFloatingPanel\":true,\"reduceMotion\":false}"
+        },
+        {
+          "name": "token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyZWM5NGU5Mi1jMmFhLTQwMzMtOWZhMS00ZjJlMDc3ZWYxYzIiLCJpYXQiOjE3NjQxMDc2MDAsImV4cCI6MTc2NDExMTIwMH0.ZqzH1-ZK1nlQB5-VFbwm6lsEaJ9bhiRwS-QmcYBm2Vw"
+        },
+        {
+          "name": "userId",
+          "value": "undefined"
+        },
+        {
+          "name": "__vue-devtools-theme__",
+          "value": "auto"
+        }
+      ]
+    }
+  ]
+}
