@@ -1,98 +1,66 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from "dotenv";
+
+dotenv.config();
+
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * Only enforce env validation when running in CLI mode.
+ * UI mode loads before env vars initialize, so skip strict checks there.
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+const isUIMode =
+  process.env.PW_TEST_HTML_REPORT_OPEN === '1' ||
+  process.env.PLAYWRIGHT_UI === 'true';
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
-
-/*
-*Loads env variables before test run
-* */
-dotenv.config()
-
-/**
- * Tells you that the env variables are missing
- * */
-if (!process.env.TESTING_EMAIL || !process.env.TESTING_PASSWORD) {
+if (!isUIMode) {
+  if (!process.env.TESTING_EMAIL || !process.env.TESTING_PASSWORD) {
     throw new Error("Missing TESTING_EMAIL or TESTING_PASSWORD in .env");
+  }
 }
-
 
 export default defineConfig({
   testDir: './tests',
-  /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+
   use: {
-      storageState: 'storageState.json' ,
-    /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'http://localhost:5173',
-      /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    storageState: 'storageState.json',
+    baseURL: process.env.BASE_URL! ?? 'http://localhost:5173',
     trace: 'on-first-retry',
+    launchOptions: {
+      env: {
+        NODE_ENV: "test"
+      }
+    }
   },
-    globalSetup: './tests/auth.setup.ts',
-  /* Configure projects for major browsers */
+
+  globalSetup: './tests/auth.setup.ts',
+  webServer: {
+  command: "npm run dev:test",
+  port: 5173,
+  reuseExistingServer: !process.env.CI,
+  },
+
   projects: [
-      {
-          name: "auth-tests",
-          use: {storageState: undefined, ...devices['Desktop Chrome']},
-          testMatch: /auth\.spec\.ts/
-      },
+    {
+      name: "auth-tests",
+      use: { storageState: undefined, ...devices['Desktop Chrome'] },
+      testMatch: /auth\.spec\.ts/
+    },
+
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
-
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
 });
