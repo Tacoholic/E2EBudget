@@ -14,11 +14,11 @@
         },
         {
           "name": "token",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkOTlmYWU2Yi1iMjY5LTQ0MjAtOWM4Zi0xODIzMDAwN2RiZjUiLCJpYXQiOjE3NjQyNzU2NzYsImV4cCI6MTc2NDI3OTI3Nn0.MiuV5msHVw7SfPZotitehSt3CkEd0jawmLZN9qT9RIg"
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJiZmJmZDAxMi1lYjkwLTQ3ZGEtYTY3YS0wMGQ5OWViZDM5ZTYiLCJpYXQiOjE3NjQ2MjA1MjMsImV4cCI6MTc2NDYyNDEyM30.nA_J_pXrCDt2ZBXeBAuYhjoImwjUjW1Kuc1QDlpo-S8"
         },
         {
           "name": "userId",
-          "value": "undefined"
+          "value": "bfbfd012-eb90-47da-a67a-00d99ebd39e6"
         },
         {
           "name": "__vue-devtools-theme__",
