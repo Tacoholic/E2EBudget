@@ -1,16 +1,22 @@
 import { defineConfig, devices } from '@playwright/test';
 import * as dotenv from "dotenv";
 
+/**
+ * Load .env into process
+ */
 dotenv.config();
 
 /**
- * Only enforce env validation when running in CLI mode.
- * UI mode loads before env vars initialize, so skip strict checks there.
+ * Checks if Playwright is running in UI mode
  */
 const isUIMode =
   process.env.PW_TEST_HTML_REPORT_OPEN === '1' ||
   process.env.PLAYWRIGHT_UI === 'true';
 
+  /**
+   * If running through CLI, checks if email 
+   * and or password are working
+   */
 if (!isUIMode) {
   if (!process.env.TESTING_EMAIL || !process.env.TESTING_PASSWORD) {
     throw new Error("Missing TESTING_EMAIL or TESTING_PASSWORD in .env");
@@ -26,41 +32,67 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    storageState: 'storageState.json',
-    baseURL: process.env.BASE_URL! ?? 'http://localhost:5173',
+    baseURL: process.env.BASE_URL ?? 'http://localhost:5173',
     trace: 'on-first-retry',
-    launchOptions: {
-      env: {
-        NODE_ENV: "test"
-      }
-    }
   },
 
-  globalSetup: './tests/auth.setup.ts',
   webServer: {
-  command: "npm run dev:test",
-  port: 5173,
-  reuseExistingServer: !process.env.CI,
+    command: "npm run dev:test",
+    port: 5173,
+    reuseExistingServer: !process.env.CI,
   },
 
   projects: [
+   
+    /**
+     * Runs only the auth.setup.ts file
+     * does not load storageState, 
+     * but produces it after logging in
+     */
     {
-      name: "auth-tests",
-      use: { storageState: undefined, ...devices['Desktop Chrome'] },
-      testMatch: /auth\.spec\.ts/
+      name: 'setup',
+      testIgnore: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/,
+      testMatch: /auth\.setup\.ts/,
+      use: {},
     },
-
+    /**
+     * Runs test in auth.spec.ts
+     * Loads login state if not in UI mode
+     */
+    {
+      name: "authenticated",
+      testMatch: /auth\.spec\.ts/,
+      dependencies: ["setup"],
+      use: {
+        storageState: isUIMode ? undefined : "storageState.json"
+      },
+    },
+    /**
+     * Only runs the followiing test: Logged out user should not have access to dashboard
+     * No cookies, no storage, no token
+     */
+    {
+      name: "unauthenticated",
+      testMatch: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/,
+     use: { storageState: undefined },
+    },
+      /**
+       * Browser Matrix
+       */
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testIgnore: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/
     },
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
+      testIgnore: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+     testIgnore: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/
     },
   ],
 });
