@@ -1,45 +1,47 @@
-import {test, expect} from "@playwright/test";
+import {test, expect} from  "../fixtures/auth.fixtures"
+
+test("User cannot login if account does not exist", async ({authPage}) => {
+     await authPage.goToLoginPage();
+     await expect(authPage.page).toHaveURL("/login");
+     await authPage.fillOutEmailInput("random@email.com");
+     await authPage.fillOutPasswordInput("123456");
+     await authPage.clickLoginButton();
+     await authPage.verifyErrorMessage("User not found!");
+});
 
 
-test("User cannot login if account does not exist", async ({page}) => {
-    await page.goto("/login");
-    await expect(page).toHaveURL("/login");
-    await page.getByPlaceholder("Email").fill("RandomEmail@email.com")
-    await page.getByPlaceholder("Password").fill("12131213")
-    await page.getByRole("button", {name: "Log In"}).click();
-    await expect(page.getByTestId("login-error")).toHaveText("User not found!", {timeout: 5000});
-})
-
-
-test("User cannot login with the wrong password", async ({page}) => {
+test("Existing user cannot login with the wrong password", async ({authPage}) => {
     const email = process.env.TESTING_EMAIL_2!;
-    await page.goto("/login");
-    await expect(page).toHaveURL("/login");
-    await page.getByPlaceholder("Email").fill(email)
-    await page.getByPlaceholder("Password").fill("12131213")
-    await page.getByRole("button", {name: "Log In"}).click();
-    await expect(page.getByTestId("login-error")).toHaveText("Password is invalid", {timeout: 5000});
-})
 
-test("Testing case sensitivity - email account in all uppercase", async ({page}) =>{
+    await authPage.goToLoginPage();
+    await expect(authPage.page).toHaveURL("/login");
+    await authPage.fillOutEmailInput(email);
+    await authPage.fillOutPasswordInput("12345");
+    await authPage.clickLoginButton();
+    await authPage.verifyErrorMessage("Password is invalid");
+});
+   
+
+test("Testing case sensitivity - email account in all uppercase", async ({authPage}) =>{
     const email = process.env.TESTING_EMAIL_ALL_UPPERCASE!
     const password = process.env.TESTING_PASSWORD!;
-    await page.goto("/login")
-    await expect(page).toHaveURL("/login");
-    await page.getByPlaceholder("Email").fill(email)
-    await page.getByPlaceholder("Password").fill(password)
-    await page.getByRole("button", {name: "Log In"}).click()
-    await expect(page.getByTestId("login-error")).toHaveText("User not found!", {timeout: 5000});
+    
+    await authPage.goToLoginPage();
+    await expect(authPage.page).toHaveURL("/login");
+    await authPage.fillOutEmailInput(email);
+    await authPage.fillOutPasswordInput(password);
+    await authPage.clickLoginButton();
+    await authPage.verifyErrorMessage("User not found!");
+});
 
-})
-
-test("Testing case sensitivty - password in all uppercase", async ({page}) => {
+test("Testing case sensitivty - password in all uppercase", async ({authPage}) => {
     const email = process.env.TESTING_EMAIL_2!
     const password = process.env.TESTING_PASSWORD_ALL_UPPERCASE!
-    await page.goto("/login")
-    await expect(page).toHaveURL("/login")
-    await page.getByPlaceholder("Email").fill(email)
-    await page.getByPlaceholder("Password").fill(password)
-    await page.getByRole("button", {name: "Log In"}).click()
-    await expect(page.getByTestId("login-error")).toHaveText("Password is invalid", {timeout: 5000});
-})
+    
+    await authPage.goToLoginPage();
+    await expect(authPage.page).toHaveURL("/login");
+    await authPage.fillOutEmailInput(email);
+    await authPage.fillOutPasswordInput(password);
+    await authPage.clickLoginButton();
+    await authPage.verifyErrorMessage("Password is invalid");
+});
