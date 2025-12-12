@@ -1,4 +1,4 @@
-import {test, expect} from  "../fixtures/auth.fixtures"
+import {test, expect} from  "../../fixtures/auth.fixtures"
 
 test("User cannot login if account does not exist", async ({authPage}) => {
      await authPage.goToLoginPage();

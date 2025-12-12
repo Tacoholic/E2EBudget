@@ -1,4 +1,4 @@
-import {test, expect} from  "../fixtures/auth.fixtures"
+import {test, expect} from  "../../fixtures/auth.fixtures";
 
 test("User can log out", async ({authPage, page}) => {
     const email = process.env.TESTING_EMAIL!;
