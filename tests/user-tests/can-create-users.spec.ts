@@ -1,4 +1,4 @@
-import {test, expect} from "../fixtures/auth.fixtures";
+import {test, expect} from "../../fixtures/auth.fixtures";
 
 
 test("User is created and redirected to the dashboard page", async ({authPage, page}) => {

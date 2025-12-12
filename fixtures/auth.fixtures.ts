@@ -1,5 +1,5 @@
 import { test as base } from "@playwright/test";
-import { AuthPage } from "../pages/auth.page";
+import {AuthPage} from "../pages/auth.page";
 
 /**
  * Creating new test object 
@@ -23,3 +23,4 @@ export const test = base.extend<{
 });
 
 export { expect } from "@playwright/test";
+

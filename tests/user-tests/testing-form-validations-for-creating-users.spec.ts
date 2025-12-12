@@ -1,4 +1,4 @@
-import {test, expect} from "../fixtures/auth.fixtures";
+import {test, expect} from "../../fixtures/auth.fixtures";
 
 test("You cannot send empty data to create a user", async ({authPage,page}) => {
      await authPage.goToLoginPage();

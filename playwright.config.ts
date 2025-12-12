@@ -31,9 +31,16 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
 
+  /**
+   * Global set up.
+   * Will run once before all tests.
+   */
+  globalSetup: './globalSetup.ts',
+
   use: {
     baseURL: process.env.BASE_URL ?? 'http://localhost:5173',
-    trace: 'on-first-retry',
+    storageState: isUIMode ? undefined : 'storageState.json',
+    trace: 'on-first-retry'
   },
 
   webServer: {
@@ -45,35 +52,12 @@ export default defineConfig({
   projects: [
    
     /**
-     * Runs only the auth.setup.ts file
-     * does not load storageState, 
-     * but produces it after logging in
-     */
-    {
-      name: 'setup',
-      testIgnore: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/,
-      testMatch: /auth\.setup\.ts/,
-      use: {},
-    },
-    /**
-     * Runs test in auth.spec.ts
-     * Loads login state if not in UI mode
-     */
-    {
-      name: "authenticated",
-      testMatch: /auth\.spec\.ts/,
-      dependencies: ["setup"],
-      use: {
-        storageState: isUIMode ? undefined : "storageState.json"
-      },
-    },
-    /**
      * Only runs the followiing test: Logged out user should not have access to dashboard
      * No cookies, no storage, no token
      */
     {
-      name: "unauthenticated",
-      testMatch: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/,
+    name: "unauthenticated",
+    testMatch: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/,
      use: { storageState: undefined },
     },
       /**

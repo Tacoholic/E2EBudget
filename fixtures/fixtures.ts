@@ -1,5 +1,5 @@
 import {test as base } from "@playwright/test";
-import { AuthHelper } from "../helpers/auth";
+import {AuthHelper} from "../helpers/auth";
 
 export const test = base.extend<{
     auth: AuthHelper;
