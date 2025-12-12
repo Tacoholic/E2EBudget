@@ -58,7 +58,7 @@ export default defineConfig({
     {
     name: "unauthenticated",
     testMatch: /auth-user-cannot-access-dashboard-if-not-signed-in\.spec\.ts/,
-     use: { storageState: undefined },
+    use: { storageState: undefined }, 
     },
       /**
        * Browser Matrix
