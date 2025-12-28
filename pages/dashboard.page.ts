@@ -16,6 +16,66 @@ export class DashboardPage {
     }
 
     /**
+     * Clicks on Add Income Button
+     */
+
+    async clickAddIncomeButton(){
+        await this.page.getByTestId("Add Income").click();
+    }
+    /**
+    * Clicks on the add expense button
+    */
+
+    async clickAddExpenseButton(){
+        await this.page.getByTestId("Add Expense").click();
+    }
+
+    /**
+     * METHODS
+     */
+
+        /**
+         * Method that fills out inputs
+         * @param testId 
+         * @param text 
+         */
+    async fillOutInputs(testId:string, text:string){
+        await this.page.getByTestId(testId,).fill(text)
+    }
+
+
+    /**
+     * Method that selects an expense
+     * category from the dropdown
+     * @param category 
+     */
+    async selectExpenseCategory(category: 'Bills' | 'Fun Fund' | 'Savings'){
+        const dropdown = this.page.locator('label:has-text("Category") + select');
+        await dropdown.selectOption(category);
+    }
+
+    /**
+     * This method scrolls to the bottom
+     * of the page
+     */
+    async scrollToBottomOfPage(){
+        await this.page.evaluate(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+    });
+    }
+
+     /**
+     * This method scrolls to the bottom
+     * of the page
+     */
+    async scrollToTopOfPage(){
+        await this.page.evaluate(() => {
+        window.scrollTo(0, 0);
+    });
+    }
+
+    
+    /**
      * ASSERTIONS
      */
 

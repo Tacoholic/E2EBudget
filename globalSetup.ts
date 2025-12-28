@@ -44,8 +44,6 @@ async function globalSetup(config: FullConfig) {
   const loginResponse = await apiContext.post(`${apiURL}/api/auth/login`, {
     data: {email, password},
   });
-  console.log('Login status:', loginResponse.status());
-  console.log('Response body:', await loginResponse.text());
   if(!loginResponse.ok()){
     throw new Error("Failed to login via API in globalSetup")
   }
