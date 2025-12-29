@@ -65,7 +65,7 @@ export class DashboardPage {
     }
 
      /**
-     * This method scrolls to the bottom
+     * This method scrolls to the top
      * of the page
      */
     async scrollToTopOfPage(){
@@ -86,6 +86,18 @@ export class DashboardPage {
         await expect(this.page).toHaveURL("/dashboard")
     }
 
+    /**
+     * Asserts that the expense entry is displaying correctly on 
+     * the dashboard
+     * @param testID 
+     * @param expense 
+     */
+    async assertExpenseIsDisplaying(testID:string,expense:string){
+    const displayedExpense = this.page
+    .getByTestId(testID)
+    .getByTestId("expense-item")
+    .first();
+     await expect(displayedExpense).toHaveText(expense);
+    };
    
-
-}
+};
