@@ -16,7 +16,7 @@ test("User can add a bill and it displays in the table", async ({toastMessage,da
      * Checks correct toast message is appearing
      */
     await dashboardPage.scrollToTopOfPage();
-    dashboardPage.assertExpenseIsDisplaying("category-bills","Rent — $10");
+    await dashboardPage.assertExpenseIsDisplaying("category-bills","Rent — $10");
     await toastMessage.verifyToastMessage("toast-success","Successfully added expense!");
 
 });
