@@ -96,7 +96,21 @@ export class DashboardPage {
     const displayedExpense = this.page
     .getByTestId(testID)
     .getByTestId("expense-item")
-    .first();
+    .last();
+     await expect(displayedExpense).toHaveText(expense);
+    };
+
+       /**
+     * Asserts that the expense entry is displaying correctly on 
+     * the dashboard
+     * @param testID 
+     * @param expense 
+     */
+    async assertIncomeIsDisplaying(testID:string,expense:string){
+    const displayedExpense = this.page
+    .getByTestId(testID)
+    .getByTestId("income-item")
+    .last();
      await expect(displayedExpense).toHaveText(expense);
     };
    

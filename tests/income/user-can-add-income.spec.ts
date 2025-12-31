@@ -6,14 +6,17 @@ test("User can add an income source of $1000 and it displays in the table", asyn
     /**
      * Adds the income
      */
-    await dashboardPage.fillOutInputs("Name","Day Job");
-    await dashboardPage.fillOutInputs("Amount","1000");
+    await dashboardPage.scrollToBottomOfPage();
+    await dashboardPage.fillOutInputs("Income Name","Day Job");
+    await dashboardPage.fillOutInputs("Income Amount","1000");
     await dashboardPage.clickAddIncomeButton();
     /**
      * Checks that income is listed 
      * under Incomes section
      */
-    await expect(page.getByRole('listitem').first()).toHaveText("Day Job — 1000");
+
+    await dashboardPage.scrollToTopOfPage();
+    await dashboardPage.assertIncomeIsDisplaying("incomes","Day Job — 1000");
     /**
      * Verifies that the correct
      * toast message is appearing
